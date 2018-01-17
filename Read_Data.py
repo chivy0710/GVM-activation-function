@@ -51,6 +51,23 @@ def ReadElectricity():
     test_out = data[0:48, 8]
     return training_in, training_out, test_in, test_out, maxE, minE
 
+def ReadZooData():
+    csv_file = csv.reader(open('./Data_zoo/zoo.csv', 'r'))
+    rows = [row for row in csv_file]
+    data = []
+    len_row = len(rows)
+    len_col = len(rows[0])
+    for i in range(len_row):
+        data = data + [[float(j) for j in rows[i]]]
+    data = np.array(data)
+    # print(data)
+    # print(len_row,len_col)
+    training_in = data[0:81, 0:16]
+    training_out = data[0:81, 16]
+    test_in = data[81:101, 0:16]
+    test_out = data[81:101, 16]
+    return training_in, training_out, test_in, test_out
+
 if __name__ == '__main__':
 
     # training_in, training_out, test_in, test_out = ReadMulFunction()
@@ -61,13 +78,13 @@ if __name__ == '__main__':
     # for i in range(5):
     #     MulFunctionPlot(training_in,training_out,i)
 
-    training_in, training_out, test_in, test_out, maxE, minE = ReadElectricity()
-    # print(training_in)
-    # print(training_out)
-    # print(test_in,test_out)
-
-    x = np.linspace(1, 48, 48)
-    plt.figure(1)
-    for i in range(7):
-        plt.plot(x, training_in[:,i])
-    plt.show()
+    # training_in, training_out, test_in, test_out, maxE, minE = ReadElectricity()
+    # # print(training_in)
+    # # print(training_out)
+    # # print(test_in,test_out)
+    #
+    # x = np.linspace(1, 48, 48)
+    # plt.figure(1)
+    # for i in range(7):
+    #     plt.plot(x, training_in[:,i])
+    # plt.show()
