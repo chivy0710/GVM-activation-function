@@ -62,10 +62,23 @@ def ReadZooData():
     data = np.array(data)
     # print(data)
     # print(len_row,len_col)
+
+    class_zoo = {1:[1,0,0,0,0,0,0], 2 :[0,1,0,0,0,0,0], 3:[0,0,1,0,0,0,0], 4:[0,0,0,1,0,0,0],
+                 5: [0, 0, 0, 0, 1, 0, 0], 6:[0,0,0,0,0,1,0], 7:[0,0,0,0,0,0,1]}
     training_in = data[0:81, 0:16]
-    training_out = data[0:81, 16]
+    training_out_value = data[0:81, 16]
+    training_out = []
+    for i in training_out_value:
+        training_out.append(class_zoo[i])
+    training_out = np.array(training_out)
+    # print(training_out)
     test_in = data[81:101, 0:16]
-    test_out = data[81:101, 16]
+    test_out_value = data[81:101, 16]
+    test_out = []
+    for i in test_out_value:
+        test_out.append(class_zoo[i])
+    test_out = np.array(test_out)
+    # print(test_out)
     return training_in, training_out, test_in, test_out
 
 if __name__ == '__main__':
@@ -88,3 +101,4 @@ if __name__ == '__main__':
     # for i in range(7):
     #     plt.plot(x, training_in[:,i])
     # plt.show()
+    training_in, training_out, test_in, test_out = ReadZooData()
