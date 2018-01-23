@@ -8,27 +8,6 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-def ReadMulFunction():
-    csv_file = csv.reader(open('./Data_Generation/MulFuncData.csv', 'r'))
-    rows = [row for row in csv_file]
-    data = []
-    len_row = len(rows)
-    len_col = len(rows[0])
-    for i in range(len_row):
-        data = data + [[float(j) for j in rows[i]]]
-    data = np.array(data)
-
-    training_in = data[[0]]
-    training_out = data[[20]]
-    test_in = data[[40]]
-    test_out = data[[41]]
-    return training_in, training_out, test_in, test_out
-
-def MulFunctionPlot(x,y,i):
-    plt.figure(i)
-    plt.plot(x[i],y[i])
-    plt.show()
-
 def ReadElectricity():
     csv_file = csv.reader(open('./Data_Electricity/data_monday.csv', 'r'))
     rows = [row for row in csv_file]
@@ -51,35 +30,32 @@ def ReadElectricity():
     test_out = data[0:48, 8]
     return training_in, training_out, test_in, test_out, maxE, minE
 
-def ReadZooData():
-    csv_file = csv.reader(open('./Data_zoo/zoo.csv', 'r'))
-    rows = [row for row in csv_file]
-    data = []
-    len_row = len(rows)
-    len_col = len(rows[0])
-    for i in range(len_row):
-        data = data + [[float(j) for j in rows[i]]]
-    data = np.array(data)
-    # print(data)
-    # print(len_row,len_col)
+def ReadCancerData():
+    # 数据格式为输入9个参数，输出标签为2分类问题，即是否有癌症，1为有，-1为没有
+    # file1 为训练的输入数据,file2 为训练标签, file3 为测试的输入数据,file4 为测试标签
+    file1 = './Data_Cancer/breast-cancer_train_data_1.asc'
+    file2 = './Data_Cancer/breast-cancer_train_labels_1.asc'
+    file3 = './Data_Cancer/breast-cancer_test_data_1.asc'
+    file4 = './Data_Cancer/breast-cancer_test_labels_1.asc'
 
-    class_zoo = {1:[1,0,0,0,0,0,0], 2 :[0,1,0,0,0,0,0], 3:[0,0,1,0,0,0,0], 4:[0,0,0,1,0,0,0],
-                 5: [0, 0, 0, 0, 1, 0, 0], 6:[0,0,0,0,0,1,0], 7:[0,0,0,0,0,0,1]}
-    training_in = data[0:81, 0:16]
-    training_out_value = data[0:81, 16]
-    training_out = []
-    for i in training_out_value:
-        training_out.append(class_zoo[i])
-    training_out = np.array(training_out)
-    # print(training_out)
-    test_in = data[81:101, 0:16]
-    test_out_value = data[81:101, 16]
-    test_out = []
-    for i in test_out_value:
-        test_out.append(class_zoo[i])
-    test_out = np.array(test_out)
-    # print(test_out)
+    data1 = np.loadtxt(file1, dtype=float)
+    data2 = np.loadtxt(file2, dtype=float)
+    data3 = np.loadtxt(file3, dtype=float)
+    data4 = np.loadtxt(file4, dtype=float)
+
+    np.reshape(data2, len(data2))
+    np.reshape(data4, len(data4))
+    data2[data2 == -1.0] = 0
+    data4[data4 == -1.0] = 0
+
+    training_in = data1
+    training_out = data2
+
+    test_in = data3
+    test_out = data4
+
     return training_in, training_out, test_in, test_out
+
 
 if __name__ == '__main__':
 
@@ -101,4 +77,3 @@ if __name__ == '__main__':
     # for i in range(7):
     #     plt.plot(x, training_in[:,i])
     # plt.show()
-    training_in, training_out, test_in, test_out = ReadZooData()
