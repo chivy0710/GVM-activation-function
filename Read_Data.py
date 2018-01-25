@@ -32,33 +32,116 @@ def ReadElectricity():
 
 def ReadCancerData():
     # 数据格式为输入9个参数，输出标签为2分类问题，即是否有癌症，1为有，-1为没有
-    # file1 为训练的输入数据,file2 为训练标签, file3 为测试的输入数据,file4 为测试标签
-    file1 = './Data_Cancer/breast-cancer_train_data_1.asc'
-    file2 = './Data_Cancer/breast-cancer_train_labels_1.asc'
-    file3 = './Data_Cancer/breast-cancer_test_data_1.asc'
-    file4 = './Data_Cancer/breast-cancer_test_labels_1.asc'
 
-    data1 = np.loadtxt(file1, dtype=float)
-    data2 = np.loadtxt(file2, dtype=float)
-    data3 = np.loadtxt(file3, dtype=float)
-    data4 = np.loadtxt(file4, dtype=float)
+    train_data = np.array([])
+    file = []
+    for i in range(100):
+        file.append("./Data_Cancer/breast-cancer_train_data_"+ str(i+1) +".asc")
+        file_load = np.loadtxt(file[i], dtype=float)
+        train_data = np.append(train_data, file_load)
+    train_data = np.reshape(train_data, [20000, 9])
 
-    np.reshape(data2, len(data2))
-    np.reshape(data4, len(data4))
-    data2[data2 == -1.0] = 0
-    data4[data4 == -1.0] = 0
+    train_labels = np.array([])
+    file = []
+    for i in range(100):
+        file.append("./Data_Cancer/breast-cancer_train_labels_"+ str(i+1) +".asc")
+        file_load = np.loadtxt(file[i], dtype=float)
+        train_labels = np.append(train_labels, file_load)
+    # train_labels = np.reshape(train_labels, [20000, 1])
 
-    training_in = data1
-    training_out = data2
+    test_data = np.array([])
+    file = []
+    for i in range(100):
+        file.append("./Data_Cancer/breast-cancer_test_data_" + str(i + 1) + ".asc")
+        file_load = np.loadtxt(file[i], dtype=float)
+        test_data = np.append(test_data, file_load)
+    test_data = np.reshape(test_data, [7700, 9])
 
-    test_in = data3
-    test_out = data4
+    test_labels = np.array([])
+    file = []
+    for i in range(100):
+        file.append("./Data_Cancer/breast-cancer_test_labels_" + str(i + 1) + ".asc")
+        file_load = np.loadtxt(file[i], dtype=float)
+        test_labels = np.append(test_labels, file_load)
+
+    train_labels[train_labels == -1.0] = 0
+    test_labels[test_labels == -1.0] = 0
+
+    train_size, test_size = 5000, 50
+
+
+    training_in = train_data[0:train_size,]
+    training_out = train_labels[0:train_size,]
+
+    test_in = test_data[0:test_size,]
+    test_out = test_labels[0:test_size,]
 
     return training_in, training_out, test_in, test_out
 
+def ReadCancerDataClass():
+    # 数据格式为输入9个参数，输出标签为2分类问题，即是否有癌症，1为有，-1为没有
+
+    train_data = np.array([])
+    file = []
+    for i in range(100):
+        file.append("./Data_Cancer/breast-cancer_train_data_"+ str(i+1) +".asc")
+        file_load = np.loadtxt(file[i], dtype=float)
+        train_data = np.append(train_data, file_load)
+    train_data = np.reshape(train_data, [20000, 9])
+
+    train_labels = np.array([])
+    train_labels_bi = []
+    file = []
+    for i in range(100):
+        file.append("./Data_Cancer/breast-cancer_train_labels_"+ str(i+1) +".asc")
+        file_load = np.loadtxt(file[i], dtype=float)
+        train_labels = np.append(train_labels, file_load)
+    train_labels[train_labels == -1.0] = 0
+
+    for i in range(len(train_labels)):
+        if train_labels[i] == 0:
+            train_labels_bi.append([0, 1])
+        else:
+            train_labels_bi.append([1, 0])
+    train_labels_bi = np.array(train_labels_bi)
+
+    test_data = np.array([])
+    file = []
+    for i in range(100):
+        file.append("./Data_Cancer/breast-cancer_test_data_" + str(i + 1) + ".asc")
+        file_load = np.loadtxt(file[i], dtype=float)
+        test_data = np.append(test_data, file_load)
+    test_data = np.reshape(test_data, [7700, 9])
+
+    test_labels = np.array([])
+    test_labels_bi = []
+    file = []
+    for i in range(100):
+        file.append("./Data_Cancer/breast-cancer_test_labels_" + str(i + 1) + ".asc")
+        file_load = np.loadtxt(file[i], dtype=float)
+        test_labels = np.append(test_labels, file_load)
+    test_labels[test_labels == -1.0] = 0
+    for i in range(len(test_labels)):
+        if test_labels[i] == 0:
+            test_labels_bi.append([0, 1])
+        else:
+            test_labels_bi.append([1, 0])
+    test_labels_bi = np.array(test_labels_bi)
+
+    train_size, test_size = 5000, 50
+
+
+    training_in = train_data[0:train_size,]
+    training_out = train_labels_bi[0:train_size,]
+
+    test_in = test_data[0:test_size,]
+    test_out = test_labels_bi[0:test_size,]
+    print(test_out)
+
+    return training_in, training_out, test_in, test_out
 
 if __name__ == '__main__':
-
+    training_in, training_out, test_in, test_out = ReadCancerDataClass()
     # training_in, training_out, test_in, test_out = ReadMulFunction()
     # print("training_in:", training_in)
     # print("training_out:", training_out)
